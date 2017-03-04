@@ -5,9 +5,14 @@ using Microsoft.Xrm.Sdk;
 
 namespace eXtremePlugins
 {
+    // Plugin to synchronize the address of accounts to their contacts, for all contacts that do not have an explicitly
+    // specified custom address.
+    // The plugin shall be registered post update of account, triggering on the seven address attributes listed below.
+    // The step should also have a pre-image registered with the same attributes to be able to determine which
+    // contacts that has/had the same address as the account.
     public class AccountAddressToContacts : JonasPluginBase.JonasPluginBase
     {
-
+        // Address fields to copy from account to contacts
         private static List<string> addressAttributes = new List<string>(new string[] {
             "address1_line1",
             "address1_line2",
@@ -31,12 +36,14 @@ namespace eXtremePlugins
                 return;
             }
 #if DEBUG
+            // This will enable extensive details about requests and results when compiling with debug configuration
             bag.Service.TraceDetails = true;
 #endif
             var contacts = GetContactsInheritingAddress(bag);
             UpdateContacts(bag, contacts);
         }
 
+        // Retrieve all contacts of the triggering account, that have the old address of the account or no address at all.
         private static EntityCollection GetContactsInheritingAddress(JonasPluginBag bag)
         {
             bag.TraceBlockStart();
@@ -72,6 +79,7 @@ namespace eXtremePlugins
             return bag.Service.RetrieveMultiple(qry);
         }
 
+        // Update contacts with the address information of the account that triggered the plugin
         private static void UpdateContacts(JonasPluginBag bag, EntityCollection contacts)
         {
             bag.TraceBlockStart();

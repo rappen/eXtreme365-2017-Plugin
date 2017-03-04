@@ -26,8 +26,7 @@ namespace eXtremePlugins
             var otheraccounts = bag.Service.RetrieveMultiple(qry);
             if (otheraccounts.Entities.Count > 0)
             {
-                var acctnames = string.Join(", ",
-                    otheraccounts.Entities.Select(e => e.GetAttributeValue<string>("name") ?? "?"));
+                var acctnames = string.Join(", ", otheraccounts.Entities.Select(e => e.GetAttributeValue<string>("name") ?? "?"));
                 var contact = bag.Service.Retrieve("contact", pcref.Id, new ColumnSet("fullname"));
                 throw new InvalidPluginExecutionException($"{contact.Name(bag, false)} is already primary contact for account(s) :\n{acctnames}");
             }
