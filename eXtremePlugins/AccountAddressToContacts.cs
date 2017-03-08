@@ -37,7 +37,7 @@ namespace eXtremePlugins
             }
 #if DEBUG
             // This will enable extensive details about requests and results when compiling with debug configuration
-            bag.Service.TraceDetails = true;
+            bag.TracingService.Verbose = true;
 #endif
             var contacts = GetContactsInheritingAddress(bag);
             UpdateContacts(bag, contacts);
@@ -95,6 +95,11 @@ namespace eXtremePlugins
                     {
                         bag.Trace("Setting {0} = {1}", attr, newvalue);
                         contact[attr] = newvalue.Equals(string.Empty) ? null : newvalue;
+                    }
+                    else if (contact.Contains(attr))
+                    {
+                        bag.Trace("Attribute {0} not changed, removing from entity to update", attr);
+                        contact.Attributes.Remove(attr);
                     }
                 }
                 bag.Service.Update(contact);
