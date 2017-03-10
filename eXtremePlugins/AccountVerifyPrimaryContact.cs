@@ -19,6 +19,7 @@ namespace eXtremePlugins
                 bag.Trace("PC is null");
                 return;
             }
+            bag.Trace("Looking for other accounts with Primary Contact {0}", pcref.Id);
             var qry = new QueryExpression("account");
             qry.ColumnSet.AddColumn("name");
             qry.Criteria.AddCondition("accountid", ConditionOperator.NotEqual, bag.PluginContext.PrimaryEntityId);
@@ -27,6 +28,7 @@ namespace eXtremePlugins
             if (otheraccounts.Entities.Count > 0)
             {
                 var acctnames = string.Join(", ", otheraccounts.Entities.Select(e => e.GetAttributeValue<string>("name") ?? "?"));
+                bag.Trace("Other account(s): {0}", acctnames);
                 var contact = bag.Service.Retrieve("contact", pcref.Id, new ColumnSet("fullname"));
                 throw new InvalidPluginExecutionException($"{contact.Name(bag, false)} is already primary contact for account(s) :\n{acctnames}");
             }
