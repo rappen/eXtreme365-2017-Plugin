@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using JonasPluginBase;
-using Microsoft.Xrm.Sdk.Query;
+﻿using JonasPluginBase;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System.Collections.Generic;
 
 namespace eXtremePlugins
 {

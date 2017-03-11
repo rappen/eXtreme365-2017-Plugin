@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JonasPluginBase;
+﻿using JonasPluginBase;
 using Microsoft.Xrm.Sdk;
+using System;
 
 namespace eXtremePlugins
 {
@@ -12,14 +8,17 @@ namespace eXtremePlugins
     {
         public override void Execute(JonasPluginBag bag)
         {
-            if (!string.IsNullOrWhiteSpace(bag.TargetEntity.GetAttributeValue<string>("fax")))
+            // Read updated value for Fax from Target entity
+            string fax = bag.TargetEntity.GetAttributeValue<string>("fax");
+
+            if (!string.IsNullOrWhiteSpace(fax))
             {
                 throw new InvalidPluginExecutionException($"Fax? Really? This is {DateTime.Now.Year}, you know... ");
             }
-            else
-            {
-                bag.Trace("No fax for {0}, this {1} is ready for the future.", bag.CompleteEntity.Name(bag, false), bag.PluginContext.PrimaryEntityName);
-            }
+
+            // Get name of the record that triggered the plugin
+            string recordName = bag.CompleteEntity.Name(bag, false);
+            bag.Trace("No fax for {0}, this {1} is ready for the future.", recordName, bag.PluginContext.PrimaryEntityName);
         }
     }
 }
