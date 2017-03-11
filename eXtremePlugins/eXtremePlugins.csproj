@@ -82,13 +82,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountAddressToContacts.cs" />
-    <Compile Include="AccountVerifyPrimaryContact.cs" />
-    <Compile Include="ContactForceMobileError.cs" />
-    <Compile Include="ContactPreventStateChange.cs" />
-    <Compile Include="ContextLogger.cs" />
+    <Compile Include="Demo3\AccountAddressToContacts.cs" />
+    <Compile Include="Demo3\AccountVerifyPrimaryContact.cs" />
+    <Compile Include="Demo3\ContactForceMobileError.cs" />
+    <Compile Include="Demo3\ContactPreventStateChange.cs" />
+    <Compile Include="Demo2\ContextLogger.cs" />
     <Compile Include="CWA\GetRandomText.cs" />
-    <Compile Include="NoFaxPlease.cs" />
+    <Compile Include="Demo2\NoFaxPlease.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CWA\ThrowError.cs" />
   </ItemGroup>
