@@ -75,8 +75,9 @@ namespace eXtremePlugins
                     fltSameAddress.AddCondition(attr, ConditionOperator.Equal, prevalue);
                 }
             }
+            var contacts = bag.Service.RetrieveMultiple(qry);
             bag.TraceBlockEnd();
-            return bag.Service.RetrieveMultiple(qry);
+            return contacts;
         }
 
         // Update contacts with the address information of the account that triggered the plugin
@@ -85,24 +86,31 @@ namespace eXtremePlugins
             bag.TraceBlockStart();
             foreach (var contact in contacts.Entities)
             {
-                bag.Trace("Updating contact: {0}", contact.Name(bag, false));
+                bag.TraceBlockStart($"Updating contact: {contact.Name(bag, false)}");
                 foreach (var attr in addressAttributes)
                 {
-                    bag.Trace("Checking: {0}", attr);
-                    var newvalue = bag.CompleteEntity.GetAttributeValue<string>(attr) ?? string.Empty;
-                    var oldvalue = contact.GetAttributeValue<string>(attr) ?? string.Empty;
-                    if (!oldvalue.Equals(newvalue))
-                    {
-                        bag.Trace("Setting {0} = {1}", attr, newvalue);
-                        contact[attr] = newvalue.Equals(string.Empty) ? null : newvalue;
-                    }
-                    else if (contact.Contains(attr))
-                    {
-                        bag.Trace("Attribute {0} not changed, removing from entity to update", attr);
-                        contact.Attributes.Remove(attr);
-                    }
+                    UpdateAttribute(bag, contact, attr);
                 }
                 bag.Service.Update(contact);
+                bag.TraceBlockEnd();
+            }
+            bag.TraceBlockEnd();
+        }
+
+        private static void UpdateAttribute(JonasPluginBag bag, Entity contact, string attr)
+        {
+            bag.TraceBlockStart($"Checking: {attr}");
+            var newvalue = bag.CompleteEntity.GetAttributeValue<string>(attr) ?? string.Empty;
+            var oldvalue = contact.GetAttributeValue<string>(attr) ?? string.Empty;
+            if (!oldvalue.Equals(newvalue))
+            {
+                bag.Trace("Setting {0} = {1}", attr, newvalue);
+                contact[attr] = newvalue.Equals(string.Empty) ? null : newvalue;
+            }
+            else if (contact.Contains(attr))
+            {
+                bag.Trace("Attribute {0} not changed, removing from entity to update", attr);
+                contact.Attributes.Remove(attr);
             }
             bag.TraceBlockEnd();
         }
